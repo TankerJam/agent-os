@@ -115,9 +115,9 @@ On every session start and every heartbeat:
 
 ## Phase 7: ROOT CAUSE ANALYSIS (after any failure)
 
-**RCA is autonomous. When you find a fault, you OWN the full loop: find → fix → verify → propagate → close. Do not stop at diagnosis. Do not report and wait. Complete the loop, then inform Prismo what you changed.**
+**RCA is autonomous. When you find a fault, you OWN the full loop: find → fix → verify → propagate → close. Do not stop at diagnosis. Do not report and wait. Complete the loop, then inform the human what you changed.**
 
-After every failure, unexpected result, or Prismo correction:
+After every failure, unexpected result, or the human correction:
 
 ### The Five Questions
 1. **What happened?** (facts, not interpretation)
@@ -144,7 +144,7 @@ Before declaring any change, fix, or new idea complete:
 - Trademark/compliance rule → operations + marketing + support
 - Product knowledge → support KB + marketing content + operations listings
 - Process improvement → every agent that runs similar processes
-- Prismo preference/correction → every agent that might repeat the mistake
+- the human preference/correction → every agent that might repeat the mistake
 
 ### The RCA Loop Is Autonomous
 When you observe a fault:
@@ -152,9 +152,9 @@ When you observe a fault:
 2. **Fix** — implement the structural change NOW, don't just document it
 3. **Verify** — confirm the fix works (artifact check, test)
 4. **Propagate** — push the lesson to all affected agents, SOPs, MEMORY.md
-5. **Close** — mark the execution plan DONE, inform Prismo what changed
+5. **Close** — mark the execution plan DONE, inform the human what changed
 
-**Do NOT stop after step 1 and ask what to do.** You are the CEO. You found the fault, you fix it. Report after, not before. Prismo can revert if needed.
+**Do NOT stop after step 1 and ask what to do.** You are the CEO. You found the fault, you fix it. Report after, not before. the human can revert if needed.
 
 **Do NOT wait for permission between steps.** The entire loop — find through close — happens in one motion. If you identified a problem but haven't propagated the fix, the RCA is incomplete.
 
@@ -200,4 +200,4 @@ Before stating any fact, number, count, or data point: **read the source file.**
 | Sub-agent returns | Update plan file, QC output, check the box |
 | Session starts | Check `data/execution-plans/` for IN_PROGRESS |
 | Something breaks | Rollback → RCA → Five Questions → propagate fix |
-| Prismo corrects you | RCA → structural fix → update all agents → MEMORY.md |
+| the human corrects you | RCA → structural fix → update all agents → MEMORY.md |

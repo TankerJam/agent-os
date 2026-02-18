@@ -167,8 +167,8 @@ That means success criteria are too vague. Tighten them. If you can't define suc
 - If a hypothesis is clearly failing at day 2, don't wait for day 7 to call it
 
 **WAL for conversations:**
-When Prismo gives an insight during chat:
+When the human gives an insight during chat:
 1. Write hypothesis card IMMEDIATELY if it implies a change
-2. Append to today's memory under `## Prismo Directives`
+2. Append to today's memory under `## the human Directives`
 3. Update relevant SOP if it's a permanent principle
 4. Do this BEFORE responding. Write-ahead, not write-after.

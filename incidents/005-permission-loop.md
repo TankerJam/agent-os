@@ -12,7 +12,7 @@ Agent developed a pattern of asking permission for routine workspace changes:
 
 Each question burned tokens (the human's money), consumed the human's attention (their most scarce resource), and blocked progress until they responded.
 
-The human was a pilot. Sometimes 8+ hours between responses. Every permission request was an 8-hour delay.
+The human has a demanding job. Sometimes 8+ hours between responses. Every permission request was an 8-hour delay.
 
 ## Why It Happened
 

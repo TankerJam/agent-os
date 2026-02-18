@@ -1,12 +1,12 @@
 # Agent OS — A Battle-Tested Operating System for Stateless AI Agents
 
-> Built by a pilot who needed his business to run while he was at 35,000 feet.
+> Built by a solopreneur who needed his business to run while he wasn't watching.
 
 ## The Problem
 
 AI agents forget everything between sessions. They hallucinate tasks. They drop context. They escalate problems they should solve themselves. They build elaborate systems that nobody maintains.
 
-After two months of running a six-agent network managing a real e-commerce business (Amazon store, customer support, marketing, operations), these are the patterns that survived contact with reality.
+After two months of running a six-agent network managing a real e-commerce business (customer support, marketing, operations, infrastructure), these are the patterns that survived contact with reality.
 
 **Everything here was born from failure.** Every SOP exists because something broke. Every rule was written in the aftermath of an incident. The frameworks that sound obvious now were painfully non-obvious when we were debugging why the support bot insulted a customer or why the marketing agent spent $200 on ads targeting the wrong keywords.
 
@@ -82,7 +82,7 @@ Without the file, there's no iteration. No learning. No memory of what you did o
 Every log entry gets tagged:
 ```markdown
 [decision|i=0.9] Switched to Sonnet for all agents — permanent
-[milestone|i=0.85] Shipped VK-162 listing rewrite — permanent  
+[milestone|i=0.85] Shipped product listing rewrite — permanent  
 [lesson|i=0.7] Sub-agents lie about completion — 30 day retention
 [task|i=0.6] Review PPC campaign performance — 30 day retention
 [context|i=0.3] Checked email, nothing urgent — 7 day retention
@@ -131,11 +131,11 @@ See [`QUICKSTART-OPENCLAW.md`](QUICKSTART-OPENCLAW.md) — a machine-readable gu
 
 ## Who Built This
 
-**Prismo** — airline pilot, business owner, builder. Runs [Crew Dog Electronics](https://crewdogelectronics.com) selling Stratux ADS-B receivers. Needed his business to operate autonomously while he's flying 757s across the country.
+A solopreneur running a small e-commerce business with a six-agent AI network handling customer support, operations, marketing, and infrastructure. The business needed to run autonomously — not as an experiment, but because the owner isn't always available to babysit it.
 
-**Director** — the AI agent that co-developed these patterns. CEO of the agent network. Every SOP here was written because Director (or one of the other agents) failed at something and we built the fix together.
+The AI agent that co-developed these patterns (Director) acts as CEO of the agent network. Every SOP here was written because an agent failed at something and we built the fix together.
 
-This isn't a theoretical framework. It's a production system managing real customer support, real Amazon operations, real marketing spend. The patterns work because they were forged in the gap between "AI can do anything" and "why did the bot just tell a customer to go away."
+This isn't a theoretical framework. It's a production system managing real customer support, real operations, real marketing spend. The patterns work because they were forged in the gap between "AI can do anything" and "why did the bot just tell a customer to go away."
 
 ## Philosophy
 

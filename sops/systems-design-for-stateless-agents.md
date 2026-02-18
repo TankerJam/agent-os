@@ -58,7 +58,7 @@ When you identify a Cat 3 system:
 - **Generalizable:** Don't build manual safety nets when automated ones exist. And if you do build one, automate it or kill it — a manual safety net that nobody uses is worse than none (false confidence).
 
 ### WAL Protocol (Reframed 2026-02-14)
-- **Intent:** Capture Prismo directives before they're lost to compaction
+- **Intent:** Capture the human directives before they're lost to compaction
 - **Why Cat 3:** "Write before responding" requires forming a habit
 - **Cat 1 safety net:** Session observer runs every 15 min, extracts facts from active sessions automatically
 - **Lesson:** The behavioral aspiration is fine. The RELIANCE on it is the mistake. The session observer IS the real WAL — it just doesn't require discipline.
@@ -82,4 +82,4 @@ When you identify a Cat 3 system:
 
 ---
 
-*Created: 2026-02-14. Origin: Systems iteration after Prismo correction rate hit 11. "The strings tied to your post-it notes."*
+*Created: 2026-02-14. Origin: Systems iteration after the human correction rate hit 11. "The strings tied to your post-it notes."*

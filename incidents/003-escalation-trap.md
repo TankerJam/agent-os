@@ -5,7 +5,7 @@
 
 ## What Happened
 
-Agent encountered a recurring infrastructure issue (dual gateway processes starting) and filed it as a GitHub issue tagged `needs-prismo`. The human's response:
+Agent encountered a recurring infrastructure issue (dual gateway processes starting) and filed it as a GitHub issue tagged `needs-human`. The human's response:
 
 > "This is a you problem to solve. Why are you bugging me with it? How can we get this fix to stick where you don't bring me these issues?"
 
