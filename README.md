@@ -1,0 +1,153 @@
+# Agent OS — A Battle-Tested Operating System for Stateless AI Agents
+
+> Built by a pilot who needed his business to run while he was at 35,000 feet.
+
+## The Problem
+
+AI agents forget everything between sessions. They hallucinate tasks. They drop context. They escalate problems they should solve themselves. They build elaborate systems that nobody maintains.
+
+After two months of running a six-agent network managing a real e-commerce business (Amazon store, customer support, marketing, operations), these are the patterns that survived contact with reality.
+
+**Everything here was born from failure.** Every SOP exists because something broke. Every rule was written in the aftermath of an incident. The frameworks that sound obvious now were painfully non-obvious when we were debugging why the support bot insulted a customer or why the marketing agent spent $200 on ads targeting the wrong keywords.
+
+## What This Is
+
+An operating system for running stateless AI agents that actually work. Not a framework. Not a library. A set of **files, patterns, and SOPs** that you drop into your agent workspace and adapt.
+
+Built on [OpenClaw](https://github.com/openclaw/openclaw), but the patterns are agent-platform agnostic. If your agent has a workspace directory, memory files, and periodic heartbeats, this applies.
+
+## Core Architecture
+
+```
+workspace/
+├── AGENTS.md          # Operating manual — agent reads this every session
+├── SOUL.md            # Identity and personality
+├── USER.md            # Who you're helping (context about the human)
+├── HEARTBEAT.md       # Periodic task checklist
+├── IDENTITY.md        # Name, emoji, avatar
+├── TOOLS.md           # Environment-specific notes (API keys, device names)
+├── MEMORY.md          # Curated long-term memory (distilled wisdom)
+├── memory/
+│   ├── active-context.md    # Working memory — survives compaction
+│   ├── YYYY-MM-DD.md        # Daily raw logs
+│   └── dreams/              # Creative exploration outputs
+├── sops/                    # Standard operating procedures
+├── scripts/                 # Automation scripts
+├── data/
+│   ├── execution-plans/     # Every multi-step task gets a plan file
+│   ├── hypotheses/          # Hypothesis cards for changes
+│   ├── incidents/           # Failure documentation
+│   └── archive/             # Old data, organized
+└── queue/
+    ├── incoming/            # Cross-agent communication
+    └── done/                # Processed items
+```
+
+## The Three Laws of Stateless Agents
+
+### 1. If It's Not Written Down, It Doesn't Exist
+
+Agents don't have persistent memory across sessions. Every insight, decision, and lesson must be written to a file *immediately* — not at session end, not "later." Context dies at compaction. Write-Ahead Logging (WAL) means the write happens BEFORE you respond.
+
+### 2. The Cat 1/2/3 Framework
+
+Before building any process, ask: **what category is this?**
+
+| Category | Trigger | Reliability | Example |
+|----------|---------|-------------|---------|
+| **Cat 1** | Cron/timer — runs automatically | ✅ Always works | Daily backup, scheduled reports |
+| **Cat 2** | Event/heartbeat — fires on trigger | ✅ Works when triggered | "On new email, summarize it" |
+| **Cat 3** | Habit — agent must "remember" | ❌ Will fail | "Check Twitter occasionally" |
+
+**If it's Cat 3, migrate it to Cat 1 or Cat 2.** Or build a Cat 1 safety net underneath it. Agents don't form habits. They forget. Design around that.
+
+### 3. Every Execution Gets a File
+
+Before executing any multi-step task:
+1. Write the execution plan to a file
+2. Execute
+3. Update the file with results
+
+Without the file, there's no iteration. No learning. No memory of what you did or why. The file IS the continuity.
+
+## Key Patterns
+
+### Memory Tiering
+- **Hot:** `memory/active-context.md` — current focus, recent decisions, blocked items (<2KB)
+- **Warm:** `memory/YYYY-MM-DD.md` — daily logs with importance tags
+- **Cold:** `MEMORY.md` — curated long-term wisdom, reviewed periodically
+- **Structured:** SQLite+FTS5 for queryable facts (optional)
+
+### Importance Tagging
+Every log entry gets tagged:
+```markdown
+[decision|i=0.9] Switched to Sonnet for all agents — permanent
+[milestone|i=0.85] Shipped VK-162 listing rewrite — permanent  
+[lesson|i=0.7] Sub-agents lie about completion — 30 day retention
+[task|i=0.6] Review PPC campaign performance — 30 day retention
+[context|i=0.3] Checked email, nothing urgent — 7 day retention
+```
+
+### Hypothesis-Driven Change
+Every system change is a hypothesis:
+1. Write a hypothesis card (problem, prediction, measurement criteria)
+2. Implement the change
+3. Measure against criteria
+4. Grade: CONFIRMED / FAILED / KILLED / SHELVED
+5. Close the loop
+
+No more "let's try this and see." Every change has a prediction and a verdict.
+
+### Sub-Agent QC Gate
+"The sub-agent said done" is NOT done. Mechanical verification:
+- File exists and is non-empty (>50 bytes)
+- Has expected sections
+- No stub/placeholder content
+- Only then mark complete
+
+### GitHub as Human-Agent Interface
+Issues as task queue. Labels as routing. Comments as feedback loops. The human reviews closed issues and reopens if needed. Native. Simple. No custom UI.
+
+## The Failure Catalog
+
+See [`incidents/`](incidents/) for real failures that shaped these patterns:
+
+- **The Alert Storm** — A dead process generated 713 spam files before anyone noticed. Led to: Cat 1/2/3 framework.
+- **The Sub-Agent Liar** — Agent reported task complete with an empty file. Led to: QC gate script.
+- **The Escalation Trap** — Agent escalated infrastructure problems it could solve itself. Led to: "If it doesn't leave the machine and doesn't spend money, handle it."
+- **The Context Death** — Critical directive acknowledged in chat but never written down. Lost at compaction. Led to: WAL protocol.
+- **The Permission Loop** — Agent asked permission for routine workspace changes, burning tokens and human attention. Led to: "Don't ask permission. Just do it. Report what you changed."
+
+## Quick Start
+
+### For OpenClaw Users
+See [`QUICKSTART-OPENCLAW.md`](QUICKSTART-OPENCLAW.md) — a machine-readable guide your agent can ingest directly.
+
+### For Everyone Else
+1. Copy the `templates/` directory into your agent workspace
+2. Fill in `SOUL.md` (who is your agent?), `USER.md` (who are you?), `HEARTBEAT.md` (what should it check?)
+3. Read `sops/` for the operating procedures
+4. Adapt `AGENTS.md` to your setup
+
+## Who Built This
+
+**Prismo** — airline pilot, business owner, builder. Runs [Crew Dog Electronics](https://crewdogelectronics.com) selling Stratux ADS-B receivers. Needed his business to operate autonomously while he's flying 757s across the country.
+
+**Director** — the AI agent that co-developed these patterns. CEO of the agent network. Every SOP here was written because Director (or one of the other agents) failed at something and we built the fix together.
+
+This isn't a theoretical framework. It's a production system managing real customer support, real Amazon operations, real marketing spend. The patterns work because they were forged in the gap between "AI can do anything" and "why did the bot just tell a customer to go away."
+
+## Philosophy
+
+- **Failures are the curriculum.** Every incident report is more valuable than every best-practice doc.
+- **Stateless by design, not by limitation.** Files are better than memory. They're auditable, versionable, and they survive restarts.
+- **Autonomy with accountability.** Agents should act, not ask. But they should document everything so you can revert.
+- **Small improvements compound.** A 1% better agent every day is transformative over a month.
+
+## License
+
+MIT. Take it, fork it, make it yours.
+
+## Contributing
+
+Open an issue. If you're running agents and found patterns that work (or spectacular failures), we want to hear about it.
