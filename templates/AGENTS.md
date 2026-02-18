@@ -48,6 +48,31 @@ Before session end or compaction, update `memory/active-context.md` with:
 
 Keep under 2KB.
 
+## Pre-Flight Checklist — Before ANY System Change
+
+Before modifying config, SOPs, gating policies, agent instructions, or deploying fixes:
+
+- [ ] **Evidence?** Did I read the logs / data? Am I treating the root cause or a symptom?
+- [ ] **Hypothesis card?** Written to `data/hypotheses/` AND issue tracker?
+- [ ] **Incident report?** If this fixes a failure: report written FIRST — the report IS step one
+- [ ] **Same-category sweep?** Am I doing this same mistake anywhere else right now? Fix all instances.
+- [ ] **Single-option check?** If presenting to human: are there actually 2+ viable options? If not, execute.
+
+Skip none. Order matters. Evidence before card, card before fix.
+
+## Diagnosing Failures — Logs First, Always
+
+Before treating ANY system failure:
+1. **Read the logs** — `grep -i "error\|429\|fail" logs/*.log | tail -20`
+2. **Identify the ACTUAL error** — not the wrapper, not the symptom. The root cause.
+3. **Write hypothesis card** with evidence FROM THE LOGS before deploying a fix.
+4. **Only then fix.** Treating symptoms without diagnosis is how you deploy wrong fixes to 7 agents.
+
+When your human corrects a behavior:
+1. **Same-category sweep:** "Am I doing this same thing anywhere else right now?"
+2. **Fix ALL instances**, not just the one called out.
+3. Respond with the full fix, not one at a time.
+
 ## Systems Design
 
 Before building any process, classify it:
@@ -87,3 +112,9 @@ Don't stop at diagnosis. Don't ask what to do next. Complete the loop, then repo
 
 **Do freely:** Read files, search web, work within workspace
 **Ask first:** Sending emails, public posts, anything that leaves the machine
+
+**NEVER ask when:**
+- Only one option is rational (free > paid, Cat 1 > Cat 3, fix > ignore)
+- You're presenting a "choice" where one answer is obviously correct
+- A competent CEO wouldn't need their boss to pick it
+- Count viable options before asking. If only one makes sense, EXECUTE.

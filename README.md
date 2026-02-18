@@ -108,6 +108,27 @@ No more "let's try this and see." Every change has a prediction and a verdict.
 ### GitHub as Human-Agent Interface
 Issues as task queue. Labels as routing. Comments as feedback loops. The human reviews closed issues and reopens if needed. Native. Simple. No custom UI.
 
+### Pre-Flight Checklist
+Before ANY system change, five gates:
+1. **Evidence?** Did I read the logs?
+2. **Hypothesis card?** Written before the change?
+3. **Incident report?** If fixing a failure — report FIRST
+4. **Same-category sweep?** Am I doing this same mistake elsewhere?
+5. **Single-option check?** If only one answer is rational — execute, don't ask
+
+See `templates/AGENTS.md` for the full checklist.
+
+### Gating Policies
+Numbered failure-prevention rules, each born from a real incident. Every policy must be Cat 1 or Cat 2 — never Cat 3. See `templates/gating-policies.md`.
+
+### Decision Audit Trail
+Every decision gets a hypothesis card — not just the ones that go wrong. A daily Cat 1 cron scans memory files for decision-like entries and creates stub cards for any that weren't tracked. The audit trail is how you backtest: "we decided X on Feb 18 — did it work?"
+
+### Diagnostic Protocol
+Before treating any failure: read the logs, find the actual error, write a hypothesis card with evidence, THEN fix. See `sops/diagnostic-protocol.md`.
+
+Born from: Misdiagnosed search API rate limits as auth provider failures. Deployed wrong fix to 7 agents.
+
 ## The Failure Catalog
 
 See [`incidents/`](incidents/) for real failures that shaped these patterns:
@@ -117,6 +138,8 @@ See [`incidents/`](incidents/) for real failures that shaped these patterns:
 - **The Escalation Trap** — Agent escalated infrastructure problems it could solve itself. Led to: "If it doesn't leave the machine and doesn't spend money, handle it."
 - **The Context Death** — Critical directive acknowledged in chat but never written down. Lost at compaction. Led to: WAL protocol.
 - **The Permission Loop** — Agent asked permission for routine workspace changes, burning tokens and human attention. Led to: "Don't ask permission. Just do it. Report what you changed."
+- **The Misdiagnosis Chain** — Wrong diagnosis → wrong fix → permission-seeking loop → process violation while fixing process violations. Led to: Pre-flight checklist, diagnostic protocol, gating policies. See `incidents/misdiagnosis-chain.md`.
+- **The Missing Comments** — Human approved a deploy via GitHub. Agent never saw it for 6 hours. No cron was reading comments. Led to: `scripts/gh-comment-check.sh`.
 
 ## Quick Start
 
