@@ -6,7 +6,7 @@
 
 AI agents forget everything between sessions. They hallucinate tasks. They drop context. They escalate problems they should solve themselves. They build elaborate systems that nobody maintains.
 
-After two months of running a six-agent network managing a real e-commerce business (customer support, marketing, operations, infrastructure), these are the patterns that survived contact with reality.
+After three months of running a seven-agent network managing a real e-commerce business (customer support, marketing, operations, infrastructure, research, ticketing, DevOps), these are the patterns that survived contact with reality.
 
 **Everything here was born from failure.** Every SOP exists because something broke. Every rule was written in the aftermath of an incident. The frameworks that sound obvious now were painfully non-obvious when we were debugging why the support bot insulted a customer or why the marketing agent spent $200 on ads targeting the wrong keywords.
 
@@ -121,6 +121,18 @@ See `templates/AGENTS.md` for the full checklist.
 ### Gating Policies
 Numbered failure-prevention rules, each born from a real incident. Every policy must be Cat 1 or Cat 2 — never Cat 3. See `templates/gating-policies.md`.
 
+### Shared Context Layer (New in v0.3)
+Three files all agents read at startup — pull-based corrections, business thesis, and tracked signals. One-writer rule: each file has one owner, everyone else reads. See `templates/shared-context.md`.
+
+### Mycelium Architecture (New in v0.3)
+Agents communicate laterally through a shared substrate, not through a central director. A relay script reads substrate files every 30 minutes and routes domain-relevant signals to target agent queues. **Key lesson: behavioral instructions in AGENTS.md are Cat 3 theater. Mechanize it.** See `sops/mycelium-architecture.md` and `scripts/mycelium-relay.sh`.
+
+### Self-Healing (New in v0.3)
+A nightly bloat check catches file bloat, stale queue items, zombie scripts, and webhook floods — everything your human shouldn't have to audit manually. See `sops/self-healing.md` and `scripts/nightly-bloat.sh`.
+
+### Standard Execution Workflow (New in v0.3)
+Every Grade M+ task follows an 8-step flow: Plan → Spawn → Sandbox → Adversarial QC → Post Result → Backtest → WAL → GH Acorn. Pre-spawn artifacts (plan file + hypothesis card) are REQUIRED before spawning sub-agents. See `sops/execution-workflow.md`.
+
 ### Decision Audit Trail
 Every decision gets a hypothesis card — not just the ones that go wrong. A daily Cat 1 cron scans memory files for decision-like entries and creates stub cards for any that weren't tracked. The audit trail is how you backtest: "we decided X on Feb 18 — did it work?"
 
@@ -140,6 +152,8 @@ See [`incidents/`](incidents/) for real failures that shaped these patterns:
 - **The Permission Loop** — Agent asked permission for routine workspace changes, burning tokens and human attention. Led to: "Don't ask permission. Just do it. Report what you changed."
 - **The Misdiagnosis Chain** — Wrong diagnosis → wrong fix → permission-seeking loop → process violation while fixing process violations. Led to: Pre-flight checklist, diagnostic protocol, gating policies. See `incidents/misdiagnosis-chain.md`.
 - **The Missing Comments** — Human approved a deploy via GitHub. Agent never saw it for 6 hours. No cron was reading comments. Led to: `scripts/gh-comment-check.sh`.
+- **The GH Issue Flood** — Two scripts created duplicate GH issues every nightly run without dedup checks. 14 duplicates accumulated. A human-approved action sat 15 days untouched in a queue. Led to: mandatory dedup guards, queue age monitoring. See `incidents/006-gh-issue-flood.md`.
+- **The Cat 3 Theater** — Added "read other agents' substrate files" as a prose instruction in AGENTS.md. Adversarial QC immediately flagged it: agents don't execute shell commands from prose. Three discretionary decisions, zero enforcement. Replaced with a mechanized relay script. Led to: "if it requires remembering, it's Cat 3 theater." See `incidents/007-cat3-theater.md`.
 
 ## Quick Start
 
@@ -154,7 +168,7 @@ See [`QUICKSTART-OPENCLAW.md`](QUICKSTART-OPENCLAW.md) — a machine-readable gu
 
 ## Who Built This
 
-A solopreneur running a small e-commerce business with a six-agent AI network handling customer support, operations, marketing, and infrastructure. The business needed to run autonomously — not as an experiment, but because the owner isn't always available to babysit it.
+A solopreneur running a small e-commerce business with a seven-agent AI network handling customer support, operations, marketing, infrastructure, research, ticketing, and DevOps. The business needed to run autonomously — not as an experiment, but because the owner isn't always available to babysit it.
 
 The AI agent that co-developed these patterns (Director) acts as CEO of the agent network. Every SOP here was written because an agent failed at something and we built the fix together.
 

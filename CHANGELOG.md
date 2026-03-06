@@ -1,5 +1,76 @@
 # Changelog
 
+## 2026-03-06 — Mycelium Architecture, Self-Healing, Execution Workflow
+
+### What happened
+Three weeks of running a seven-agent network exposed a fundamental architecture problem: everything routed through Director. Cross-agent signals died in queues. Health issues went undetected until the human audited manually. Scripts created duplicate GH issues nightly. "Just add it to AGENTS.md" turned out to be the agent equivalent of "just put it in the wiki." 
+
+### New patterns
+
+#### Mycelium Architecture
+Agents communicate laterally through a shared substrate instead of routing everything through Director. Each agent writes a daily substrate file with a "Signal" section flagging cross-domain observations. A relay script (`scripts/mycelium-relay.sh`, every 30 min) reads all substrate files, diffs against last scan, and routes domain-relevant signals to target agent queues.
+
+**Critical lesson:** Adding "read other agents' files" as a prose instruction in AGENTS.md is Cat 3 theater. The agent must decide to read, decide what's relevant, and decide to act — three discretionary decisions with zero enforcement. The relay script makes it Cat 1: signals arrive in your queue; you process your queue.
+
+See: `sops/mycelium-architecture.md`, `incidents/007-cat3-theater.md`
+
+#### Self-Healing: Nightly Bloat Check
+A master health check (`scripts/nightly-bloat.sh`) aggregates sub-checks for file bloat, stale queue items, webhook floods, and zombie scripts. Auto-fixes what it can (with backup), creates GH issues for what needs human attention.
+
+Specific checks born from real failures:
+- **Observations.md at 1,323 lines** — auto-trim at 400 lines (with backup first!)
+- **Human-approved action sitting 15 days unactioned** — alert at 7 days
+- **556 empty webhook stubs** — auto-purge stubs matching "Task: unspecified"
+- **14 duplicate GH issues** — grep check for dedup guards in dispatch scripts
+- **SOUL.md at 270 lines** (target <60) — create GH issue
+- **Missing RECOVERY.md** — auto-create template
+
+See: `sops/self-healing.md`
+
+#### Standard Execution Workflow
+Every non-trivial task follows 8 steps: PLAN → SPAWN → SANDBOX → ADVERSARIAL → POST RESULT → BACKTEST → WAL → GH ACORN. Pre-spawn artifacts (execution plan file, hypothesis card, queue item, active-context anchor) are REQUIRED before spawning sub-agents. A routing-gate check runs every 15 minutes and flags violations.
+
+Key addition: **Post adversarial QC result to human IMMEDIATELY before continuing work.** This was a real failure — the agent would finish QC, start fixing issues, and the human would have to ask "what did QC find?"
+
+See: `sops/execution-workflow.md`
+
+#### Shared Context Layer
+Three files all agents read at session startup (pull-based, not push):
+- `shared-context/FEEDBACK-LOG.md` — cross-agent corrections (one writer, all readers)
+- `shared-context/THESIS.md` — business worldview and positioning
+- `shared-context/SIGNALS.md` — trends being tracked by research
+
+One-writer rule: each file has one owner. Others read only. Prevents merge conflicts and contradictory edits.
+
+See: `templates/shared-context.md`
+
+### New SOPs
+- `sops/mycelium-architecture.md` — lateral agent communication via substrate + relay
+- `sops/self-healing.md` — automated health checks and bloat detection
+- `sops/execution-workflow.md` — 8-step mandatory flow for complex tasks
+
+### New scripts
+- `scripts/mycelium-relay.sh` — substrate signal router (every 30 min)
+- `scripts/nightly-bloat.sh` — master health check aggregator
+
+### New incidents
+- `incidents/006-gh-issue-flood.md` — 14 duplicate GH issues from missing dedup guards
+- `incidents/007-cat3-theater.md` — behavioral instructions that never execute
+
+### New templates
+- `templates/shared-context.md` — FEEDBACK-LOG, THESIS, SIGNALS templates with one-writer rule
+
+### Key lessons
+1. **"Just add it to AGENTS.md" is Cat 3 theater.** Prose instructions require agents to remember, decide, and act. Mechanical enforcement (crons, relays, queue items) works. Behavioral instructions don't.
+2. **Every `gh issue create` needs a dedup guard.** Without it, nightly scripts create duplicate issues for the same conditions. We had 14 before catching it.
+3. **Auto-fix must backup first.** `tail -150 file > file.tmp && mv file.tmp file` without a backup destroys data on the first false positive.
+4. **Run frequency must match detection window.** A check for "webhook floods in the last hour" that runs at 6 AM catches nothing. Run it hourly.
+5. **Subshell variable scoping silently kills checks.** `some_command | while read; do ARRAY+=(); done` — the array changes are lost in the subshell. Use process substitution: `while read; do ...; done < <(some_command)`.
+6. **Health check ownership matters.** If your director agent runs all the health checks, you've recreated the bottleneck. Infrastructure checks should belong to your infrastructure agent.
+7. **Date-based archives, not size-based.** Archive daily logs by age (14-day window), not by word count. Agents loading 30 days of history is the real context bloat problem.
+
+---
+
 ## 2026-02-18 — Process Enforcement, Search Resilience, Decision Audit Trail
 
 ### What happened
