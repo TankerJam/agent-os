@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-03-06 (late) — Adversarial Testing Guide
+
+### Added
+- `sops/adversarial-testing.md` — Complete guide to cross-model adversarial review. Three layers (same-provider QC, cross-provider review, blind-spot scans), model selection guide, budget estimates, setup instructions. Designed so a new OpenClaw user can read it and implement from scratch.
+- README updated with adversarial testing section
+
+### Why
+Because your agent will tell you everything is fine. A model from a different provider will tell you the truth.
+
+---
+
 ## 2026-03-06 — Mycelium Architecture, Self-Healing, Execution Workflow
 
 ### What happened
