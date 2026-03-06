@@ -98,6 +98,9 @@ Every system change is a hypothesis:
 
 No more "let's try this and see." Every change has a prediction and a verdict.
 
+### Adversarial QC — Cross-Model Review (New in v0.3)
+Different models have different blind spots. The model that did the work can't objectively review it. Spawn a *different* model to adversarially review outputs before shipping. Haiku executes → Opus reviews. Sonnet executes → Opus reviews. Opus executes → GPT-4o reviews (cross-provider). Post findings to human before acting on them. See `sops/adversarial-qc.md` for the full guide with templates, model pairing, and real examples.
+
 ### Sub-Agent QC Gate
 "The sub-agent said done" is NOT done. Mechanical verification:
 - File exists and is non-empty (>50 bytes)
