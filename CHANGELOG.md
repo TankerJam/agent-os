@@ -1,5 +1,35 @@
 # Changelog
 
+## 2026-03-07 — Cron Hygiene at Scale
+
+### What happened
+Running 64 crons across 7 agents, we discovered 23 missing `--tz` (running UTC instead of local time), 16 defaulting to Opus for mechanical `grep` jobs, and zero using `--best-effort-deliver`. Manual fix applied to all 64, but the question remained: how do you remember these rules next time?
+
+### New patterns
+
+#### Cron Hygiene Skill + Automated Checker
+Two-layer gate:
+1. **Skill file** (`sops/cron-hygiene.md`) — read BEFORE creating any cron. Required flags, model right-sizing, `--light-context`, monitoring, external watchdog patterns.
+2. **Checker script** (`scripts/cron-hygiene-check.sh`) — nightly automated audit of all crons.
+
+#### Key optimizations
+- **`--light-context`** saves 5-15K tokens/run by skipping workspace file injection for script-runner jobs.
+- **`--stagger`** prevents load spikes when 10+ crons fire simultaneously.
+- **External watchdog** — Gateway death = silent cron death. System-level health check catches this.
+- **Webhook delivery** for critical alerts — HTTP POST instead of hoping chat channels are up.
+
+### Key lessons
+1. Cron hygiene is Cat 1 (automated checker), not Cat 3 (docs nobody reads during flow).
+2. Model cost compounds: Opus at 15-min intervals = ~$2-5/day. Haiku = $0.05/day.
+3. `--light-context` is the highest-impact optimization most setups miss entirely.
+4. The Gateway IS the scheduler. No Gateway = no crons. Always have an external watchdog.
+
+### New files
+- `sops/cron-hygiene.md` — comprehensive cron management guide
+- `scripts/cron-hygiene-check.sh` — automated hygiene checker
+
+---
+
 ## 2026-03-06 (late) — Adversarial Testing Guide
 
 ### Added

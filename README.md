@@ -139,6 +139,9 @@ Every Grade M+ task follows an 8-step flow: Plan → Spawn → Sandbox → Adver
 ### Adversarial Testing — Cross-Model Review (New in v0.3)
 Your agent lies about quality — not maliciously, just optimistically. The fix: a model from a **different provider** reviews the work before the human sees it. Three layers: same-provider QC (Opus checks Sonnet), cross-provider review (GPT checks Claude), and periodic blind-spot scans. Same-provider catches ~60% of issues; cross-provider catches ~85%. See `sops/adversarial-testing.md`.
 
+### Cron Hygiene (New in v0.4)
+At scale, cron jobs silently degrade: missing timezones, wrong models burning tokens, delivery failures killing output, vague messages that cold-start agents can't interpret. A hygiene skill + automated checker catches all of this. Includes `--light-context` optimization (saves 5-15K tokens per run on mechanical jobs), external watchdog patterns, and community best practices. See `sops/cron-hygiene.md` and `scripts/cron-hygiene-check.sh`.
+
 ### Decision Audit Trail
 Every decision gets a hypothesis card — not just the ones that go wrong. A daily Cat 1 cron scans memory files for decision-like entries and creates stub cards for any that weren't tracked. The audit trail is how you backtest: "we decided X on Feb 18 — did it work?"
 
