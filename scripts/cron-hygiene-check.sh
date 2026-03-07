@@ -32,7 +32,7 @@ try:
         payload = job.get('payload', {})
         delivery = job.get('delivery', {})
         
-        if not sched.get('tz'):
+        if not sched.get('tz') and sched.get('kind') != 'at':
             issues.append(f'⚠️  {name}: missing --tz')
             stats['no_tz'] += 1
         if not payload.get('model'):
