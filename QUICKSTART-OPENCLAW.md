@@ -156,7 +156,7 @@ Write `memory/YYYY-MM-DD.md` as things happen. Tag every entry:
 - [decision|i=0.9] Switched to hypothesis-driven changes — permanent
 - [milestone|i=0.85] Deployed customer support knowledge base — permanent
 - [lesson|i=0.7] Sub-agents lie about completion — always verify — 30d retention
-- [task|i=0.6] Review PPC campaign performance — 30d retention
+- [task|i=0.6] Review campaign performance — 30d retention
 - [context|i=0.3] Routine heartbeat, nothing urgent — 7d retention
 ```
 

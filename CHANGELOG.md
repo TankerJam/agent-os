@@ -27,9 +27,9 @@ Your workspace files have a character limit. Exceed it and instructions silently
 Born from: Incident 008 — AGENTS.md grew 13.8% past the 20K limit. All agents ran with truncated instructions for 7 hours.
 
 #### Watchdog-on-the-Watchdog
-Every automated system needs a second system checking the first one is running. Observer script → canary check. PPC optimizer → nightly audit. Health check → external watchdog.
+Every automated system needs a second system checking the first one is running. Monitoring script → canary check. Management tool → nightly audit. Health check → external watchdog.
 
-Born from: Incident 012 (observer dark 4 days, nobody noticed) and Incident 013 ($460 in ad spend burned over 31 days because the management tool was built but never operationalized).
+Born from: Incident 012 (monitor dark 4 days, nobody noticed) and Incident 013 (ad spend burned for a month because the management tool was built but never operationalized).
 
 #### Prompt Injection Defense
 Structural defenses for agents reading external content: memory write protection, explicit startup checklists, format validation, cross-agent propagation. See `sops/prompt-injection-defense.md`.
@@ -50,8 +50,8 @@ Director plans and QCs. Domain agents execute. When the director starts doing do
 - `incidents/010-circular-planning.md` — 4 hours of planning about fixing failures while committing failures
 - `incidents/011-prompt-injection.md` — targeted attack mimicking platform internals
 - `incidents/012-observer-blackout.md` — monitoring dark 4 days, nobody noticed
-- `incidents/013-ppc-burn.md` — $460 wasted because a tool was built but never cron'd
-- `incidents/014-wrong-images.md` — QC checked form but not content; wrong images live 3 weeks
+- `incidents/013-unmonitored-spend.md` — ad spend wasted because a tool was built but never cron'd
+- `incidents/014-content-qc-gap.md` — QC checked form but not content; wrong output live for weeks
 
 ### New SOPs
 - `sops/context-budget.md` — workspace file size management

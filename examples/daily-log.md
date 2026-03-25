@@ -7,7 +7,7 @@
 - [decision|i=0.9] Switched all agents to Sonnet minimum — Flash models producing hallucinations
 - [milestone|i=0.85] Shipped product listing rewrite — 40% more keyword coverage
 - [lesson|i=0.7] When removing LaunchAgents, always kill the running process too — orphan caused 713 spam files
-- [task|i=0.6] Review PPC campaign performance by Friday
+- [task|i=0.6] Review campaign performance by Friday
 - [context|i=0.3] Routine heartbeat — email clear, calendar clear, no queue items
 
 ## Human Directives

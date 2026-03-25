@@ -12,7 +12,7 @@
 set -euo pipefail
 
 # CONFIGURE THESE
-REPO="${GH_REPO:-TankerJam/crewdog-ops}"
+REPO="${GH_REPO:-your-org/your-repo}"
 LABEL="${GH_LABEL:-needs-prismo}"
 WORKSPACE="${OPENCLAW_WORKSPACE:-$(pwd)}"
 STATE_FILE="$WORKSPACE/data/gh-comment-state.json"

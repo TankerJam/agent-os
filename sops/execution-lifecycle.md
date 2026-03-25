@@ -70,7 +70,7 @@ Status: IN_PROGRESS
 Preview the change without applying it:
 - **Files:** Show the diff, don't write it
 - **API calls:** Log what WOULD be sent
-- **PPC/ads:** Calculate projected impact
+- **Ads/campaigns:** Calculate projected impact
 - **Listings:** Draft in a file, never edit live without staged draft
 - **Config:** `config.get` before `config.patch`
 - **If no dry run is possible:** Flag for human review. Do not proceed.
@@ -187,7 +187,7 @@ Before stating any fact, number, count, or data point: **read the source file.**
 - ❌ **Skipping dry run because "it's simple"** — simple things break too
 - ❌ **Planning in your head** — if the plan isn't in a file, it doesn't exist
 - ❌ **Workarounds without cleanup tasks** — every workaround MUST have a "remove this by [date/condition]" note in MEMORY.md or the daily log. Temporary fixes that aren't tracked become permanent bugs
-- ❌ **Executing without reading the relevant strategy doc** — if a strategy/best-practices doc exists for the domain you're changing (PPC, listings, content, agent config), READ IT before making changes. Writing a great plan then violating it is worse than having no plan. The pre-flight is: "What does our written strategy say about this?"
+- ❌ **Executing without reading the relevant strategy doc** — if a strategy/best-practices doc exists for the domain you're changing (ads, listings, content, agent config), READ IT before making changes. Writing a great plan then violating it is worse than having no plan. The pre-flight is: "What does our written strategy say about this?"
 
 ---
 
