@@ -1,3 +1,78 @@
+## 2026-03-25 — Four-Month Retrospective: What Worked and What Didn't
+
+### The big picture
+Four months in, the system is qualitatively different from where it started. Month 1 was chaos. Month 2 overcorrected with too many rules (AGENTS.md hit 22K chars and silently truncated). Month 3 replaced prose rules with mechanical enforcement. Month 4 reached steady state — most failures are now novel, not repeats.
+
+Human interventions dropped from 15-20/day to 1-2/week. Not because the agents got smarter, but because the environment got more structured.
+
+### What worked
+- **Cat 1/2/3 Framework** — still the single most valuable pattern
+- **Hypothesis-driven change** — half our predictions were wrong, and we knew it quickly instead of months later
+- **File-based communication** — never failed once (vs `sessions_send` which failed 21/21 times early on)
+- **Cross-model adversarial QC** — catches 25% more issues than same-provider review
+- **Substrate/mycelium pattern** — eliminated director-as-bottleneck
+
+### What didn't work
+- **Prose instructions as behavioral controls** — Cat 3 controls fail 100% of the time at scale
+- **Complex automation before simple automation** — built n8n workflows for problems we didn't have
+- **Model-as-personality** — consumed context tokens, produced inconsistent behavior
+- **Nightly dream cycles** — fun concept, poor ROI, replaced with continuous substrate writes
+- **Human-in-the-loop for everything** — created a bottleneck. Classify as RED/non-RED instead
+
+### New patterns
+
+#### Context Budget Management
+Your workspace files have a character limit. Exceed it and instructions silently truncate. AGENTS.md target: <18K. MEMORY.md target: <12K. Total: <60K. Automated daily cron checks sizes before you hit the wall. See `sops/context-budget.md`.
+
+Born from: Incident 008 — AGENTS.md grew 13.8% past the 20K limit. All agents ran with truncated instructions for 7 hours.
+
+#### Watchdog-on-the-Watchdog
+Every automated system needs a second system checking the first one is running. Observer script → canary check. PPC optimizer → nightly audit. Health check → external watchdog.
+
+Born from: Incident 012 (observer dark 4 days, nobody noticed) and Incident 013 ($460 in ad spend burned over 31 days because the management tool was built but never operationalized).
+
+#### Prompt Injection Defense
+Structural defenses for agents reading external content: memory write protection, explicit startup checklists, format validation, cross-agent propagation. See `sops/prompt-injection-defense.md`.
+
+Born from: Incident 011 — targeted attack mimicking internal platform audit messages.
+
+#### Infrastructure Two-Person Rule
+Builder ≠ Validator. The agent that creates infrastructure hands it off to a different agent for validation. See `sops/infrastructure-deployment.md`.
+
+Born from: Incident 009 — agent deployed auth changes and "verified" them with the same blind spot.
+
+#### Domain Autonomy
+Director plans and QCs. Domain agents execute. When the director starts doing domain work, quality drops. Pattern: catch yourself doing domain work → STOP → drop queue item for domain agent.
+
+### New incidents
+- `incidents/008-context-overflow-spiral.md` — silent instruction truncation for 7 hours
+- `incidents/009-auth-break.md` — eager agent broke all 7 agents' auth without being asked
+- `incidents/010-circular-planning.md` — 4 hours of planning about fixing failures while committing failures
+- `incidents/011-prompt-injection.md` — targeted attack mimicking platform internals
+- `incidents/012-observer-blackout.md` — monitoring dark 4 days, nobody noticed
+- `incidents/013-ppc-burn.md` — $460 wasted because a tool was built but never cron'd
+- `incidents/014-wrong-images.md` — QC checked form but not content; wrong images live 3 weeks
+
+### New SOPs
+- `sops/context-budget.md` — workspace file size management
+- `sops/infrastructure-deployment.md` — two-person rule for deployments
+- `sops/prompt-injection-defense.md` — structural injection defense
+
+### Key metrics (approximate)
+| Metric | Month 1 | Month 4 |
+|--------|---------|---------|
+| Human corrections/day | 15-20 | 1-2 |
+| Repeated failures | ~60% | <10% |
+| Agent uptime | ~70% | ~98% |
+| Mean time to detect failure | 6-24h | <2h |
+| Cat 3 controls | ~15 | 0 |
+| Automated gates | 3 | 28 |
+
+### The meta-lesson
+Stateless agents don't learn. Their environment learns for them. The system works not because the agents got smarter, but because the workspace files, enforcement scripts, crons, and incident catalog got better.
+
+---
+
 # Changelog
 
 ## 2026-03-07 — Cron Hygiene at Scale
